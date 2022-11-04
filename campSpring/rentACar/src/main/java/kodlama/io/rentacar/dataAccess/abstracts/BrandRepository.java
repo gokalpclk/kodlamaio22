@@ -1,14 +1,11 @@
 package kodlama.io.rentacar.dataAccess.abstracts;
 
 import kodlama.io.rentacar.entities.concretes.Brand;
-
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * @author Gokalp on 10/26/22
  */
-public interface BrandRepository {
-    List<Brand> getAll();
-
+public interface BrandRepository extends JpaRepository<Brand, Integer> {
 
 }

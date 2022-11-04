@@ -1,6 +1,7 @@
 package kodlama.io.rentacar.business.abstracts;
 
-import kodlama.io.rentacar.entities.concretes.Brand;
+import kodlama.io.rentacar.business.requests.CreateBrandRequest;
+import kodlama.io.rentacar.business.responses.GetAllBrandsResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  */
 @Service
 public interface BrandService {
-    List<Brand> getAll();
+    List<GetAllBrandsResponse> getAll();
+    void add(CreateBrandRequest createBrandRequest);
 
 }
