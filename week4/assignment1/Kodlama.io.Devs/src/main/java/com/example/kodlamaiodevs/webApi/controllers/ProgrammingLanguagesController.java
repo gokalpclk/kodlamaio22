@@ -1,8 +1,10 @@
 package com.example.kodlamaiodevs.webApi.controllers;
 
 import com.example.kodlamaiodevs.business.abstracts.ProgrammingLanguageService;
-import com.example.kodlamaiodevs.entities.concretes.ProgrammingLanguage;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.kodlamaiodevs.dto.requests.ProgrammingLanguageSaveRequestDto;
+import com.example.kodlamaiodevs.dto.requests.ProgrammingLanguageUpdateAndDeleteRequestDto;
+import com.example.kodlamaiodevs.dto.responses.ProgrammingLanguageDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,31 +14,25 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/v1/programminglanguages")
+@RequiredArgsConstructor
 public class ProgrammingLanguagesController {
-    private ProgrammingLanguageService programmingLanguageService;
+    private final ProgrammingLanguageService programmingLanguageService;
 
-    @Autowired
-    public ProgrammingLanguagesController(ProgrammingLanguageService programmingLanguageService) {
-        this.programmingLanguageService = programmingLanguageService;
-    }
+
 
     @PostMapping("/add")
-    public void add(ProgrammingLanguage programmingLanguage) {
-        try {
-            programmingLanguageService.add(programmingLanguage);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public ProgrammingLanguageDto add(@RequestBody ProgrammingLanguageSaveRequestDto programmingLanguageSaveRequestDto) {
+         return programmingLanguageService.add(programmingLanguageSaveRequestDto);
     }
 
     @GetMapping("/getbyid")
-    public ProgrammingLanguage getById(@RequestParam Long id) {
+    public ProgrammingLanguageDto getById(@RequestParam Long id) {
         return programmingLanguageService.getById(id);
     }
 
     @PostMapping("/delete")
-    public void delete(@RequestParam ProgrammingLanguage programmingLanguage) throws Exception {
-        programmingLanguageService.delete(programmingLanguage);
+    public void delete(@RequestBody ProgrammingLanguageUpdateAndDeleteRequestDto programmingLanguageUpdateAndDeleteRequestDto) throws Exception {
+        programmingLanguageService.delete(programmingLanguageUpdateAndDeleteRequestDto);
     }
 
     @PostMapping("/deleteById")
@@ -45,13 +41,13 @@ public class ProgrammingLanguagesController {
 
     }
 
-    @PostMapping("/update")
-    public void update(@RequestBody ProgrammingLanguage language) {
-        programmingLanguageService.update(language);
+    @PutMapping("/update")
+    public ProgrammingLanguageDto update(@RequestBody ProgrammingLanguageUpdateAndDeleteRequestDto programmingLanguageUpdateAndDeleteRequestDto) {
+        return programmingLanguageService.update(programmingLanguageUpdateAndDeleteRequestDto);
     }
 
     @GetMapping("/getall")
-    public List<ProgrammingLanguage> getAll(){
+    public List<ProgrammingLanguageDto> getAll(){
         return programmingLanguageService.getAll();
     }
 

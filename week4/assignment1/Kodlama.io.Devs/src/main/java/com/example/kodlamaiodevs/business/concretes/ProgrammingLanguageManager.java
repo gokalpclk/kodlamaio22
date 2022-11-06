@@ -2,40 +2,45 @@ package com.example.kodlamaiodevs.business.concretes;
 
 import com.example.kodlamaiodevs.business.abstracts.ProgrammingLanguageService;
 import com.example.kodlamaiodevs.dataAccess.abstracts.ProgrammingLanguageRepository;
+import com.example.kodlamaiodevs.dto.converters.ProgrammingLanguageMapper;
+import com.example.kodlamaiodevs.dto.requests.ProgrammingLanguageSaveRequestDto;
+import com.example.kodlamaiodevs.dto.requests.ProgrammingLanguageUpdateAndDeleteRequestDto;
+import com.example.kodlamaiodevs.dto.responses.ProgrammingLanguageDto;
 import com.example.kodlamaiodevs.entities.concretes.ProgrammingLanguage;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Gokalp on 10/28/22
  */
 @Service
+@RequiredArgsConstructor
 public class ProgrammingLanguageManager implements ProgrammingLanguageService {
 
-    private ProgrammingLanguageRepository programmingLanguageRepository;
+    private final ProgrammingLanguageRepository programmingLanguageRepository;
 
-    @Autowired
-    public ProgrammingLanguageManager(ProgrammingLanguageRepository programmingLanguageRepository) {
-        this.programmingLanguageRepository = programmingLanguageRepository;
+
+    @Override
+    public ProgrammingLanguageDto add(ProgrammingLanguageSaveRequestDto programmingLanguageSaveRequestDto)  {
+        ProgrammingLanguage programmingLanguage = ProgrammingLanguageMapper.INSTANCE.convertToProgrammingLanguage(programmingLanguageSaveRequestDto);
+        //if (checkNameExists(programmingLanguage) || checkIdExists(programmingLanguage) || !checkNameValidation(programmingLanguage)) {
+        //    throw new Exception("Programming Language can not add");
+        //}else {
+        programmingLanguage = programmingLanguageRepository.save(programmingLanguage);
+        ProgrammingLanguageDto programmingLanguageDto = ProgrammingLanguageMapper.INSTANCE.convertToProgrammingLanguageDto(programmingLanguage);
+        return programmingLanguageDto;
+        //}
     }
 
     @Override
-    public ProgrammingLanguage add(ProgrammingLanguage programmingLanguage) throws Exception {
-        if (checkNameExists(programmingLanguage) || checkIdExists(programmingLanguage) || !checkNameValidation(programmingLanguage)) {
-            throw new Exception("Programming Language can not add");
-        }else {
-            return  programmingLanguageRepository.add(programmingLanguage);
-        }
-    }
-
-    @Override
-    public void delete(ProgrammingLanguage programmingLanguage) throws Exception {
-        if(programmingLanguage.getId() == null) {
+    public void delete(ProgrammingLanguageUpdateAndDeleteRequestDto programmingLanguageUpdateAndDeleteRequestDto) throws Exception {
+        if (programmingLanguageUpdateAndDeleteRequestDto.getId() == null) {
             throw new Exception("There is no programming language such as you have entered!");
         }
+        ProgrammingLanguage programmingLanguage = ProgrammingLanguageMapper.INSTANCE.convertToProgrammingLanguage(programmingLanguageUpdateAndDeleteRequestDto);
         programmingLanguageRepository.delete(programmingLanguage);
     }
 
@@ -45,23 +50,37 @@ public class ProgrammingLanguageManager implements ProgrammingLanguageService {
     }
 
     @Override
-    public ProgrammingLanguage update(ProgrammingLanguage programmingLanguage) {
-        return programmingLanguageRepository.update(programmingLanguage);
+    public ProgrammingLanguageDto update(ProgrammingLanguageUpdateAndDeleteRequestDto programmingLanguageUpdateAndDeleteRequestDto) {
+        ProgrammingLanguage programmingLanguage = ProgrammingLanguageMapper.INSTANCE.convertToProgrammingLanguage(programmingLanguageUpdateAndDeleteRequestDto);
+        programmingLanguage = programmingLanguageRepository.save(programmingLanguage);
+        ProgrammingLanguageDto programmingLanguageDto = ProgrammingLanguageMapper.INSTANCE.convertToProgrammingLanguageDto(programmingLanguage);
+        return programmingLanguageDto;
     }
 
     @Override
-    public List<ProgrammingLanguage> getAll() {
-        return programmingLanguageRepository.getAll();
+    public List<ProgrammingLanguageDto> getAll() {
+        List<ProgrammingLanguage> programmingLanguageList = programmingLanguageRepository.findAll();
+        List<ProgrammingLanguageDto> programmingLanguageDtoList = ProgrammingLanguageMapper.INSTANCE.convertToProgrammingLanguageDtoList(programmingLanguageList);
+        return programmingLanguageDtoList;
     }
 
     @Override
-    public ProgrammingLanguage getById(Long id) {
-        return programmingLanguageRepository.getById(id);
+    public ProgrammingLanguageDto getById(Long id) {
+        ProgrammingLanguage programmingLanguage;
+        try {
+            programmingLanguage = getByIdWithControl(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        ProgrammingLanguageDto programmingLanguageDto = ProgrammingLanguageMapper.INSTANCE.convertToProgrammingLanguageDto(programmingLanguage);
+        return programmingLanguageDto;
+
+
     }
 
     private boolean checkNameExists(ProgrammingLanguage programmingLanguage) {
-        for (ProgrammingLanguage language: programmingLanguageRepository.getAll()) {
-            if(programmingLanguage.getName().equals(language.getName())){
+        for (ProgrammingLanguage language : programmingLanguageRepository.findAll()) {
+            if (programmingLanguage.getName().equals(language.getName())) {
                 return true;
             }
         }
@@ -69,8 +88,8 @@ public class ProgrammingLanguageManager implements ProgrammingLanguageService {
     }
 
     private boolean checkIdExists(ProgrammingLanguage programmingLanguage) {
-        for (ProgrammingLanguage language: programmingLanguageRepository.getAll()) {
-            if(programmingLanguage.getId().equals(language.getId())){
+        for (ProgrammingLanguage language : programmingLanguageRepository.findAll()) {
+            if (programmingLanguage.getId().equals(language.getId())) {
                 return true;
             }
         }
@@ -79,10 +98,28 @@ public class ProgrammingLanguageManager implements ProgrammingLanguageService {
 
     private boolean checkNameValidation(ProgrammingLanguage programmingLanguage) {
         String name = programmingLanguage.getName();
-        if (name.isBlank() || name.isEmpty() || name.equals(null)){
+        if (name.isBlank() || name.isEmpty() || name.equals(null)) {
             return false;
         }
         return true;
+    }
+
+    public ProgrammingLanguage getByIdWithControl(Long id) throws Exception {
+        Optional<ProgrammingLanguage> entityOptional = findById(id);
+
+        ProgrammingLanguage entity;
+
+        if (entityOptional.isPresent()) {
+            entity = entityOptional.get();
+        } else {
+            throw new Exception("ITEM NOT FOUND");
+        }
+
+        return entity;
+    }
+
+    public Optional<ProgrammingLanguage> findById(Long id) {
+        return programmingLanguageRepository.findById(id);
     }
 
 

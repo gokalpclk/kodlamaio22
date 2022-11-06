@@ -6,6 +6,7 @@ import kodlama.io.rentacar.business.requests.CreateBrandRequest;
 import kodlama.io.rentacar.business.responses.GetAllBrandsResponse;
 import kodlama.io.rentacar.dataAccess.abstracts.BrandRepository;
 import kodlama.io.rentacar.entities.concretes.Brand;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +17,11 @@ import java.util.List;
  */
 
 @Service
+@RequiredArgsConstructor
 public class BrandManager implements BrandService {
-    private BrandRepository brandRepository;
+    private final BrandRepository brandRepository;
 
-    @Autowired
-    public BrandManager(BrandRepository brandRepository) {
-        this.brandRepository = brandRepository;
-    }
+
 
     @Override
     public List<GetAllBrandsResponse> getAll() {

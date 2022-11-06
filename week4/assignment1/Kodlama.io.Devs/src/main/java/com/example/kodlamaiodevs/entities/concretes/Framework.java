@@ -1,21 +1,22 @@
 package com.example.kodlamaiodevs.entities.concretes;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
- * @author Gokalp on 10/28/22
+ * @author Gokalp on 11/4/22
  */
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "programming_language")
-public class ProgrammingLanguage {
+@Table(name = "framework")
+public class Framework {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +25,7 @@ public class ProgrammingLanguage {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "programmingLanguage", targetEntity = Framework.class)
-    private List<Framework> frameworkList;
-
+    @ManyToOne
+    @JoinColumn(name = "programmingId", referencedColumnName = "id")
+    private ProgrammingLanguage programmingLanguage;
 }
