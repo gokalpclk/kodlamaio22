@@ -14,6 +14,7 @@ import java.util.List;
 public interface FrameworkService {
     FrameworkDto add(FrameworkSaveRequestDto frameworkSaveRequestDto);
     void delete(FrameworkUpdateAndDeleteRequestDto frameworkUpdateAndDeleteRequestDto) throws Exception;
+
     void deleteById(Long frameworkId);
     FrameworkDto update(FrameworkUpdateAndDeleteRequestDto frameworkUpdateAndDeleteRequestDto);
     List<FrameworkDto> getAll();

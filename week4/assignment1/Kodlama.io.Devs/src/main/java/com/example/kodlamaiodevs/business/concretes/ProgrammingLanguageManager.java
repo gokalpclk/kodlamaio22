@@ -26,6 +26,7 @@ public class ProgrammingLanguageManager implements ProgrammingLanguageService {
     @Override
     public ProgrammingLanguageDto add(ProgrammingLanguageSaveRequestDto programmingLanguageSaveRequestDto)  {
         ProgrammingLanguage programmingLanguage = ProgrammingLanguageMapper.INSTANCE.convertToProgrammingLanguage(programmingLanguageSaveRequestDto);
+        //Todo: Logic error
         //if (checkNameExists(programmingLanguage) || checkIdExists(programmingLanguage) || !checkNameValidation(programmingLanguage)) {
         //    throw new Exception("Programming Language can not add");
         //}else {
@@ -51,7 +52,14 @@ public class ProgrammingLanguageManager implements ProgrammingLanguageService {
 
     @Override
     public ProgrammingLanguageDto update(ProgrammingLanguageUpdateAndDeleteRequestDto programmingLanguageUpdateAndDeleteRequestDto) {
-        ProgrammingLanguage programmingLanguage = ProgrammingLanguageMapper.INSTANCE.convertToProgrammingLanguage(programmingLanguageUpdateAndDeleteRequestDto);
+
+        ProgrammingLanguage programmingLanguage = null;
+        try {
+            programmingLanguage = getByIdWithControl(programmingLanguageUpdateAndDeleteRequestDto.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        programmingLanguage.setName(programmingLanguageUpdateAndDeleteRequestDto.getName());
         programmingLanguage = programmingLanguageRepository.save(programmingLanguage);
         ProgrammingLanguageDto programmingLanguageDto = ProgrammingLanguageMapper.INSTANCE.convertToProgrammingLanguageDto(programmingLanguage);
         return programmingLanguageDto;

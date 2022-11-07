@@ -52,8 +52,14 @@ public class FrameworkManager implements FrameworkService {
 
     @Override
     public FrameworkDto update(FrameworkUpdateAndDeleteRequestDto frameworkUpdateAndDeleteRequestDto) {
-        Framework framework = FrameworkMapper.INSTANCE.convertToFramework(frameworkUpdateAndDeleteRequestDto);
-//        framework
+        Framework framework = null;
+        try {
+            framework = getByIdWithControl(frameworkUpdateAndDeleteRequestDto.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        //Framework framework = FrameworkMapper.INSTANCE.convertToFramework(frameworkUpdateAndDeleteRequestDto);
+        framework.setName(frameworkUpdateAndDeleteRequestDto.getName());
         framework = frameworkRepository.save(framework);
         FrameworkDto frameworkDto = FrameworkMapper.INSTANCE.convertToFrameworkDto(framework);
         return frameworkDto;

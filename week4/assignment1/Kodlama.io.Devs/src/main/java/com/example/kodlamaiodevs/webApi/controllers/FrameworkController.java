@@ -30,20 +30,19 @@ public class FrameworkController {
         return frameworkDto;
     }
 
-    @GetMapping("/getbyid")
-    public FrameworkDto getById(@RequestParam Long id) {
+    @GetMapping("/{id}")
+    public FrameworkDto getById(@PathVariable Long id) {
         return frameworkService.getById(id);
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public void delete(@RequestBody FrameworkUpdateAndDeleteRequestDto frameworkUpdateAndDeleteRequestDto) throws Exception {
         frameworkService.delete(frameworkUpdateAndDeleteRequestDto);
     }
 
-    @PostMapping("/deleteById")
-    public void delete(@RequestParam Long id) {
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
         frameworkService.deleteById(id);
-
     }
 
     @PutMapping("/update")

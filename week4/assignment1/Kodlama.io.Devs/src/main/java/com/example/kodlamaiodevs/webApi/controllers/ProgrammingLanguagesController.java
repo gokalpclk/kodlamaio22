@@ -25,18 +25,18 @@ public class ProgrammingLanguagesController {
          return programmingLanguageService.add(programmingLanguageSaveRequestDto);
     }
 
-    @GetMapping("/getbyid")
-    public ProgrammingLanguageDto getById(@RequestParam Long id) {
+    @GetMapping("/{id}")
+    public ProgrammingLanguageDto getById(@PathVariable Long id) {
         return programmingLanguageService.getById(id);
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public void delete(@RequestBody ProgrammingLanguageUpdateAndDeleteRequestDto programmingLanguageUpdateAndDeleteRequestDto) throws Exception {
         programmingLanguageService.delete(programmingLanguageUpdateAndDeleteRequestDto);
     }
 
-    @PostMapping("/deleteById")
-    public void delete(@RequestParam Long id) {
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
         programmingLanguageService.deleteById(id);
 
     }

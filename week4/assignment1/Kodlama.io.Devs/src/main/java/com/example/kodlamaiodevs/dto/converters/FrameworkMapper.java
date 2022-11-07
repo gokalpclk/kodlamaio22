@@ -19,7 +19,6 @@ public interface FrameworkMapper {
     FrameworkMapper INSTANCE = Mappers.getMapper(FrameworkMapper.class);
 
     Framework convertToFramework(FrameworkSaveRequestDto frameworkSaveRequestDto);
-    Framework convertToFramework(FrameworkDto frameworkDto);
     Framework convertToFramework(FrameworkUpdateAndDeleteRequestDto frameworkUpdateAndDeleteRequestDto);
 
     @Mapping(target = "programmingLanguageName", source = "programmingLanguage.name")
