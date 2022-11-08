@@ -18,8 +18,6 @@ import java.util.List;
 public class ProgrammingLanguagesController {
     private final ProgrammingLanguageService programmingLanguageService;
 
-
-
     @PostMapping("/add")
     public ProgrammingLanguageDto add(@RequestBody ProgrammingLanguageSaveRequestDto programmingLanguageSaveRequestDto) {
          return programmingLanguageService.add(programmingLanguageSaveRequestDto);
