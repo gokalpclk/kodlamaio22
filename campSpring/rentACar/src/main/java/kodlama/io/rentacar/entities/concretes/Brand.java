@@ -1,8 +1,6 @@
 package kodlama.io.rentacar.entities.concretes;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,7 +9,8 @@ import javax.persistence.*;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Table(name = "brands")
 @Entity
 public class Brand {
