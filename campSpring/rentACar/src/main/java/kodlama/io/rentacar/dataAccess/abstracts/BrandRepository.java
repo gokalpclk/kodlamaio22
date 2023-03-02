@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Gokalp on 10/26/22
  */
 public interface BrandRepository extends JpaRepository<Brand, Integer> {
-
+    boolean existsByName(String name);
 }
