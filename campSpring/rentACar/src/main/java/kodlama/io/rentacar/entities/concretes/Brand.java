@@ -3,6 +3,7 @@ package kodlama.io.rentacar.entities.concretes;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * @author Gokalp on 10/26/22
@@ -22,5 +23,8 @@ public class Brand {
 
     @Column(name = "name")
     private String name;
+
+    @OneToMany(mappedBy = "brand")
+    List<Model> models;
 
 }
